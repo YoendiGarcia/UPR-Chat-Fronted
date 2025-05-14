@@ -30,11 +30,10 @@ const closeSideMenu = () =>{
 
 <style scoped>
 .container {
-  width: 25vw;
-  height: 100vh;
+  width: 25dvw;
+  height: 100dvh;
   padding: 20px;
-  border: 1px solid #009150;
-  border-radius: 20px;
+  box-shadow: 0px 0px 3px 0px gray;
   background-color: white;
   position: fixed;
   z-index: 2;
@@ -49,7 +48,7 @@ const closeSideMenu = () =>{
 .chats-history{
     display: grid;
     grid-template-columns: 100%;
-    height: 70vh;
+    height: 70%;
     width: 100%;
     flex-wrap: wrap;
     overflow-y: auto;
@@ -68,9 +67,10 @@ const closeSideMenu = () =>{
   border: none;
 }
 
-.cancel > i, .logout > i {
+.cancel > i, .logout > i, .settings > i {
   font-size: 1.6rem;
-  color: #009150;
+  padding: 10px;
+  color: #81878b;
   transition: 0.3s ease-in-out;
 }
 
@@ -95,14 +95,6 @@ const closeSideMenu = () =>{
   font-size: 1rem;
 }
 
-.settings > i {
-  font-size: 1.3rem;
-  color: #009150;
-  border: 1px solid #009150;
-  border-radius: 50%;
-  padding: 10px;
-  transition: 0.3s;
-}
 
 .new-chat > i:hover,
 .settings > i:hover {
@@ -111,21 +103,24 @@ const closeSideMenu = () =>{
   cursor: pointer;
 }
 
-.cancel > i:hover, .logout >i:hover {
-  color: #04cf74;
+.cancel > i:hover, .logout >i:hover, .settings > i:hover {
+  color: #009150;
   cursor: pointer;
+  border-radius: 50%;
+  background-color: #dff7df;
 }
+
 
 
 @media (max-width: 780px) {
     .container{
-        width: 50vw;
+        width: 50dvw;
     }
 }
 
 @media (max-width: 480px) {
     .container{
-        width: 75vw;
+        width: 75dvw;
     }
 }
 

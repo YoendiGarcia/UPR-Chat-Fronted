@@ -18,7 +18,7 @@ div {
   width: 90%;
   height: 50px;
   border-radius: 5px;
-  box-shadow: 0px 0px 2px 2px #009150;
+  border: 1px solid #81878b;
   margin: 3px;
   padding: 3px;
 }
@@ -32,6 +32,7 @@ p {
 
 div:hover {
   background-color: #dff7df;
+  border: 1px solid #dff7df;
   cursor: pointer;
 }
 </style>
