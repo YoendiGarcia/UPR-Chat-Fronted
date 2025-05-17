@@ -34,7 +34,7 @@ const closeSideMenu = () =>{
   height: 100dvh;
   padding: 20px;
   box-shadow: 0px 0px 3px 0px gray;
-  background-color: white;
+  background-color: #F7F8FA;
   position: fixed;
   z-index: 2;
   left: 0px;

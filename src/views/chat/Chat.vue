@@ -13,11 +13,10 @@ import {
 } from './config/chat.styles.ts'
 import { connect } from './config/chat.connect.ts'
 import {
-  extractJSONAndCreateForm,
-  styleForm,
-  generateFormFromString,
-  deleteJsonFromString,
-} from './utils/chat.utils.ts'
+  requestInterceptor,
+  responseInterceptor,
+} from './utils/chat.handle-messages.ts'
+import { htmlClassUtilities } from './utils/chat.format-methods.ts'
 
 const isMenuOpen = ref(false)
 
@@ -29,42 +28,7 @@ const handleClose = (value: boolean) => {
   isMenuOpen.value = value
 }
 
-const requestInterceptor = async (requestDetails: any) => {
-  console.log(requestDetails) // printed above
-  const otherTask = await fetch('http://localhost:8000/', {
-    method: 'post',
-    body: JSON.stringify({ messages: [{ role: 'user', text: 'jhjk' }] }),
-    headers: { 'Content-Type': 'application/json' },
-  })
-  if (!otherTask.ok) {
-    return { error: 'Error in other task' }
-  }
-  return requestDetails
-}
 
-const responseInterceptor = async (response: any) => {
-  const otherTask = await fetch('http://localhost:8000/', {
-    method: 'post',
-    body: JSON.stringify({ messages: [{ role: 'user', text: 'jhjk' }] }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-  if (!otherTask.ok) {
-    return { error: 'Error in other task' }
-  }
-  // let form = extractJSONAndCreateForm(response['text'])
-  let result = generateFormFromString(response['text'])
-  if (result) {
-    const form = styleForm(result.form)
-    const text = deleteJsonFromString(response['text'], result.jsonObj)
-    response['html'] = form.outerHTML
-    response['text'] = text
-  }
-
-  // printed above
-  return response
-}
 </script>
 
 <template>
@@ -84,6 +48,7 @@ const responseInterceptor = async (response: any) => {
         :avatars="avatars"
         :requestInterceptor="requestInterceptor"
         :responseInterceptor="responseInterceptor"
+        :htmlClassUtilities="htmlClassUtilities"
       >
         <IntroPanel />
       </deep-chat>

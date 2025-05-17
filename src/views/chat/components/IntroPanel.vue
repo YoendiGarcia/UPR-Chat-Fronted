@@ -1,6 +1,6 @@
 <script setup lang="ts"></script>
 <template>
-  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; margin-bottom: 120px;">
+  <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; margin-bottom: 120px; color: #009150">
     <img src="../../../assets/logo.png" alt="Logo" width="100px" height="100px" />
     <div
     >
