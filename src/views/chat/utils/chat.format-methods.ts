@@ -1,5 +1,12 @@
 import { FormField, FormConfig } from '@/interfaces/Forms'
 
+//Variable para guardar los datos de los inputs de los formularios
+export let data: any = {}
+
+//Arreglo para guardar los ids de los campos requeridos(y usarlo mas abajo)
+let requireds: string[] = []
+
+//Funcion para extraer el objeto JSON de la response si existe
 export const extractJson = (completeText: string) => {
   // Expresión regular para encontrar el JSON en el string
   const jsonRegex = /{(?:[^{}]|{(?:[^{}]|{[^{}]*})*})*}/
@@ -26,6 +33,7 @@ export const extractJson = (completeText: string) => {
   return jsonObj
 }
 
+//Funcion para crear formulario
 export const createForm = (config: FormConfig): HTMLDivElement => {
   const form = document.createElement('div')
 
@@ -52,6 +60,11 @@ export const createForm = (config: FormConfig): HTMLDivElement => {
     form.appendChild(fieldContainer)
   }
 
+  const textError = document.createElement('p')
+  textError.className = 'text-error'
+  textError.textContent = 'Faltan datos por llenar'
+  form.appendChild(textError)
+
   const submitButton = document.createElement('button')
   submitButton.type = 'submit'
   submitButton.textContent = config.submitButtonText || 'Enviar'
@@ -63,6 +76,7 @@ export const createForm = (config: FormConfig): HTMLDivElement => {
   return form
 }
 
+//Funcion para crear los inputs del formulario
 const createInputElement = (field: FormField): HTMLElement => {
   let element: HTMLElement
 
@@ -75,6 +89,7 @@ const createInputElement = (field: FormField): HTMLElement => {
       textarea.placeholder = field.placeholder || ''
       if (field.value) textarea.textContent = field.value
       element = textarea
+      data[textarea.id] = ''
       break
 
     case 'select':
@@ -83,14 +98,15 @@ const createInputElement = (field: FormField): HTMLElement => {
       select.name = field.name
       select.className = 'select'
 
-      const defaultOption = document.createElement('option');
-      defaultOption.value = '';
-      defaultOption.textContent = 'Selecciona una opción';
-      defaultOption.selected = true;
+      const defaultOption = document.createElement('option')
+      defaultOption.value = ''
+      defaultOption.textContent = 'Selecciona una opción'
+      defaultOption.selected = true
       defaultOption.hidden = true
-      select.appendChild(defaultOption);
+      select.appendChild(defaultOption)
 
       if (field.options) {
+        data[select.id] = field.options[0].value
         field.options.forEach((option) => {
           const optionElement = document.createElement('option')
           optionElement.value = option.value
@@ -107,6 +123,7 @@ const createInputElement = (field: FormField): HTMLElement => {
       radioContainer.id = field.id || field.name
 
       if (field.options) {
+        data[radioContainer.id] = field.options[0].value
         field.options.forEach((option, index) => {
           const radioId = `${field.id || field.name}-${index}`
 
@@ -129,6 +146,10 @@ const createInputElement = (field: FormField): HTMLElement => {
           radioContainer.appendChild(radioDiv)
         })
       }
+      if (field.required) {
+        radioContainer.setAttribute('required', '')
+        requireds.push(field.id || field.name)
+      }
       return radioContainer
 
     case 'checkbox':
@@ -136,6 +157,7 @@ const createInputElement = (field: FormField): HTMLElement => {
         const checkboxContainer = document.createElement('div')
         checkboxContainer.className = 'checkbox-group'
         checkboxContainer.id = field.id || field.name
+        data[checkboxContainer.id] = []
 
         field.options.forEach((option, index) => {
           const checkboxId = `${field.id || field.name}-${index}`
@@ -161,6 +183,10 @@ const createInputElement = (field: FormField): HTMLElement => {
           checkboxDiv.appendChild(label)
           checkboxContainer.appendChild(checkboxDiv)
         })
+        if (field.required) {
+          checkboxContainer.setAttribute('required', '')
+          requireds.push(field.id || field.name)
+        }
         return checkboxContainer
       } else {
         const checkboxDiv = document.createElement('div')
@@ -170,6 +196,7 @@ const createInputElement = (field: FormField): HTMLElement => {
         checkbox.type = 'checkbox'
         checkbox.id = field.id || field.name
         checkbox.name = field.name
+        data[checkbox.id] = false
         if (field.value) checkbox.checked = Boolean(field.value)
 
         const label = document.createElement('label')
@@ -178,6 +205,11 @@ const createInputElement = (field: FormField): HTMLElement => {
 
         checkboxDiv.appendChild(checkbox)
         checkboxDiv.appendChild(label)
+        checkboxDiv.id = checkbox.id
+        if (field.required) {
+          checkbox.setAttribute('required', '')
+          requireds.push(field.id || field.name)
+        }
         return checkboxDiv
       }
 
@@ -188,12 +220,14 @@ const createInputElement = (field: FormField): HTMLElement => {
       input.name = field.name
       input.className = 'input'
       input.placeholder = field.placeholder || ''
+      data[input.id] = ''
       if (field.value) input.value = field.value
       element = input
   }
 
   if (field.required) {
     element.setAttribute('required', '')
+    requireds.push(field.id || field.name)
   }
 
   if (field.attributes) {
@@ -205,6 +239,7 @@ const createInputElement = (field: FormField): HTMLElement => {
   return element
 }
 
+//Funcion para darle estilos al formulario
 export const styleForm = (form: any) => {
   // Aplicar estilos al formulario principal
   form.style.fontFamily = "'Arial', sans-serif"
@@ -272,9 +307,15 @@ export const styleForm = (form: any) => {
   button.style.cursor = 'pointer'
   button.style.transition = 'background-color 0.3s'
 
+  const textError = form.querySelector('.text-error')
+  textError.style.color = 'red'
+  textError.style.textAlign = 'center'
+  textError.style.visibility = 'hidden'
+
   return form
 }
 
+//Funcion para eliminar el JSON de la response
 export const deleteJsonFromString = (completeText: string, jsonObj: any) => {
   // Primero intentamos encontrar el JSON con el formato exacto
   const jsonString = JSON.stringify(jsonObj, null, 2)
@@ -319,26 +360,18 @@ export const deleteJsonFromString = (completeText: string, jsonObj: any) => {
   return completeText
 }
 
-const testFunction = (data: any) => {
-  fetch('http://localhost:8000/form', {
-    method: 'post',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+//Funcion para validar los campos obligatorios del formulario
+export const fieldsValidated = () => {
+  for (let fieldId of requireds) {
+    if (data[fieldId] == '' || data[fieldId] == false) {
+      return false
+    }
+  }
+  return true
 }
 
-let data: any = {}
-
+//Funcion para controlar las interacciones con los inputs del formulario y recoger los datos
 export const htmlClassUtilities = {
-  ['send-btn']: {
-    events: {
-      ['click']: () => {
-        testFunction(data)
-      },
-    },
-  },
   ['input']: {
     events: {
       ['mouseleave']: (e: any) => {
@@ -360,27 +393,27 @@ export const htmlClassUtilities = {
       },
     },
   },
-  ['radio-group']:{
-    events:{
+  ['radio-group']: {
+    events: {
       ['change']: (e: any) => {
         data[e.target.closest('.radio-group').id] = e.target.value
       },
-    }
+    },
   },
-  ['checkbox-group']:{
-    events:{
+  ['checkbox-group']: {
+    events: {
       ['change']: (e: any) => {
         data[e.target.closest('.checkbox-group').id] = new Array()
-        if(!data[e.target.closest('.checkbox-group').id].includes(e.target.value))
+        if (!data[e.target.closest('.checkbox-group').id].includes(e.target.value))
           data[e.target.closest('.checkbox-group').id].push(e.target.value)
       },
-    }
+    },
   },
-  ['checkbox-single']:{
-    events:{
+  ['checkbox-single']: {
+    events: {
       ['change']: (e: any) => {
         data[e.target.id] = e.target.value
       },
-    }
-  }, 
+    },
+  },
 }

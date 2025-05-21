@@ -1,5 +1,7 @@
+//Estilo general del chat
 export const style = 'width: 100%; height: 90dvh; border: none'
 
+//Estilos del input
 export const textInput = {
   placeholder: { text: 'Haz tu consulta' },
   styles: {
@@ -13,6 +15,7 @@ export const textInput = {
   },
 }
 
+//Estilos de los mensajes
 export const messageStyles = {
   default: {
     shared: { bubble: { color: 'white' } },
@@ -31,6 +34,7 @@ export const messageStyles = {
   },
 }
 
+//Estilos del boton de enviar
 export const submitButtonStyles = {
   submit: {
     container: {
@@ -53,6 +57,7 @@ export const submitButtonStyles = {
   position: 'inside-right',
 }
 
+//Estilos de los avatars
 export const avatars = {
   default: {
     styles: { avatar: { height: '30px', width: '30px' }, container: { marginTop: '8px' } },
