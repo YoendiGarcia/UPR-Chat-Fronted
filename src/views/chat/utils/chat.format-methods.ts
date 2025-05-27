@@ -1,5 +1,6 @@
 import { FormField, FormConfig } from '@/interfaces/Forms'
 
+
 //Variable para guardar los datos de los inputs de los formularios
 export let data: any = {}
 
@@ -417,3 +418,4 @@ export const htmlClassUtilities = {
     },
   },
 }
+

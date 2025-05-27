@@ -10,7 +10,7 @@ export const textInput = {
       width: '90%',
       borderRadius: '10px',
       boxShadow: '0px 0px 10px 5px #dff7df',
-      backgroundColor:"#F7F8FA"
+      backgroundColor: '#F7F8FA',
     },
   },
 }
@@ -59,9 +59,9 @@ export const submitButtonStyles = {
 
 //Estilos de los avatars
 export const avatars = {
-  default: {
-    styles: { avatar: { height: '30px', width: '30px' }, container: { marginTop: '8px' } },
-  },
+  // default: {
+  //   styles: { avatar: { height: '30px', width: '30px' }, container: { marginTop: '8px' } },
+  // },
   ai: { src: '../../../assets/ai.svg', styles: { avatar: { marginLeft: '-3px' } } },
   user: { src: '../../../assets/user.svg', styles: { avatar: { borderRadius: '15px' } } },
 }

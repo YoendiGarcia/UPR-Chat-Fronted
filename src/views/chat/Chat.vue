@@ -39,13 +39,13 @@ const handleClose = (value: boolean) => {
   <main>
     <div class="chat-container">
       <deep-chat
-        :demo="true"
+        :demo="false"
+        :avatars="avatars"
         :connect="connect"
         :style="style"
         :textInput="textInput"
         :messageStyles="messageStyles"
         :submitButtonStyles="submitButtonStyles"
-        :avatars="avatars"
         :requestInterceptor="requestInterceptor"
         :responseInterceptor="responseInterceptor"
         :htmlClassUtilities="htmlClassUtilities"
