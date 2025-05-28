@@ -2,17 +2,45 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const username = ref<string>("")
-const password = ref<string>("")
+const username = ref<string>('')
+const password = ref<string>('')
+const errorMsg = ref<boolean>(false)
+const disabledSendBtn = ref<boolean>(true)
 const router = useRouter()
 
-const handleLogin = () =>{
+const handleLogin = async () => {
   const loginParams = new URLSearchParams()
-  loginParams.append("username",username.value)
-  loginParams.append("password",password.value)
+  loginParams.append('username', username.value)
+  loginParams.append('password', password.value)
+  const apiUrl = import.meta.env.VITE_API_URL
 
-  router.push('/chat')
+  try {
+    const response = await fetch(`${apiUrl}/users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+      },
+      body: loginParams,
+    })
 
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+    const tokenData = await response.json()
+    router.push('/chat')
+    localStorage.setItem('token', tokenData.access_token)
+  } catch (error) {
+    console.error('Error getting OAuth token:', error)
+    errorMsg.value = true
+  }
+}
+
+const handleButtonEnable = () =>{
+  if(username.value.length > 3 && password.value.length > 3){
+    disabledSendBtn.value = false
+  } else{
+    disabledSendBtn.value = true
+  }
 }
 
 </script>
@@ -20,17 +48,18 @@ const handleLogin = () =>{
 <template>
   <div class="container">
     <div>
-      <img src="../../assets/Logo.png" alt="Logo">
-      <p>Bienvenido</p>
+      <img src="../../assets/Logo.png" alt="Logo" />
+      <p class="welcome">Bienvenido</p>
       <div class="username-container">
         <label for="username">Usuario</label>
-        <input type="text" id="username" placeholder="Nombre de usuario" v-model="username" />
+        <input type="text" id="username" placeholder="Nombre de usuario" v-model="username" @input="handleButtonEnable" />
       </div>
       <div class="password-container">
         <label for="password">Contraseña</label>
-        <input type="password" id="password" placeholder="Contraseña" v-model="password" />
+        <input type="password" id="password" placeholder="Contraseña" v-model="password" @input="handleButtonEnable" />
       </div>
-      <button class="send-btn" @click="handleLogin" >Entrar</button>
+      <p v-show="errorMsg" class="error-msg">Usuario o contraseña incorrectos</p>
+      <button :disabled="disabledSendBtn" :class="{'hover-btn': !disabledSendBtn}" class="send-btn" @click="handleLogin">Entrar</button>
     </div>
   </div>
 </template>
@@ -49,12 +78,12 @@ const handleLogin = () =>{
   height: 100vh;
 }
 
-.container > div{
-    border: 1px solid #009150 ;
-    padding: 10px;
-    border-radius: 10px;
-    width: 25%;
-    box-shadow: 0 0 20px 10px #dff7df;
+.container > div {
+  border: 1px solid #009150;
+  padding: 10px;
+  border-radius: 10px;
+  width: 25%;
+  box-shadow: 0 0 20px 10px #dff7df;
 }
 
 .username-container,
@@ -66,80 +95,89 @@ const handleLogin = () =>{
   width: 90%;
 }
 
-img{
+img {
   height: 100px;
   width: 100px;
 }
 
-p{
+.welcome {
   color: #009150;
   font-size: 2rem;
   font-weight: bold;
   margin: 0;
 }
 
-.send-btn{
-    background-color: white;
-    border: 1px solid #009150;
-    padding: 10px;
-    width: 90%;
-    border-radius: 10px;
-    font-size: 1.2rem;
-    font-weight: 500;
-    color: #009150;
-    transition: .3s ease-in-out;
-    margin-top: 20px;
-    margin-bottom: 10px;
+.send-btn {
+  background-color: white;
+  border: 1px solid #009150;
+  padding: 10px;
+  width: 90%;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #009150;
+  transition: 0.3s ease-in-out;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
-.send-btn:hover{
+.send-btn:disabled{
+  color: #dff7df;
+  border: 1px solid #dff7df;
+}
+
+.hover-btn:hover {
   background-color: #009150;
   color: white;
   cursor: pointer;
 }
 
-label{
+label {
   font-size: 1.2rem;
   color: #009150;
   width: 100%;
 }
 
-input{
+input {
   width: 100%;
   height: 35px;
   border-radius: 10px;
   border: 1px solid #009150;
-  font-size: .9rem;
+  font-size: 0.9rem;
+}
+
+.error-msg {
+  color: #e60026;
+  text-align: center;
 }
 
 @media (max-width: 980px) {
-  .container > div{
+  .container > div {
     width: 40%;
   }
 }
 
 @media (max-width: 730px) {
-  .container > div{
+  .container > div {
     width: 50%;
   }
 }
 
 @media (max-width: 520px) {
-  .container > div{
+  .container > div {
     width: 60%;
   }
 }
 
 @media (max-width: 480px) {
-  .container > div{
+  .container > div {
     width: 70%;
   }
 }
 
 @media (max-width: 350px) {
-  .container > div{
+  .container > div {
     width: 80%;
   }
 }
-
 </style>
