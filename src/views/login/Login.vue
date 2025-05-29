@@ -31,7 +31,7 @@ const handleLogin = async () => {
     const tokenData = await response.json()
     router.push('/chat')
     localStorage.setItem('access_token', tokenData.access_token)
-    authStore.setUsername(username.value)
+    localStorage.setItem('username', username.value)
   } catch (error) {
     console.error('Error getting OAuth token:', error)
     errorMsg.value = true

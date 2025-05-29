@@ -1,22 +1,35 @@
 <script setup lang="ts">
 import 'primeicons/primeicons.css'
-import HistoryChat from './HistoryChat.vue';
-import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'vue-router';
+import HistoryChat from './HistoryChat.vue'
+import { useRouter } from 'vue-router'
+import { useChatStore } from '@/stores/chat'
 
-const emit = defineEmits(['closeSideMenu'])
+const emit = defineEmits(['closeSideMenu','createNewChat'])
 
-const authStore = useAuthStore()
-const username = authStore.username
+const username = localStorage.getItem('username')
 const router = useRouter()
+const chatStore = useChatStore()
+const chats = chatStore.getAllChats()
 
-const closeSideMenu = () =>{
-    emit('closeSideMenu',false)
+const closeSideMenu = () => {
+  emit('closeSideMenu', false)
 }
 
-const handleLogout = () =>{
+const handleLogout = () => {
   localStorage.removeItem('access_token')
   router.push('/')
+}
+
+const handleChat = (chatId: number) => {
+  console.log('Saliooooo ->', chatId)
+}
+
+const createNewChat = () =>{
+  chatStore.addChat({
+    chatId: 1,
+    llmqueries: []
+  })
+  emit('createNewChat',[])
 }
 
 </script>
@@ -24,17 +37,21 @@ const handleLogout = () =>{
 <template>
   <div class="container slide-in">
     <div class="up-buttons">
-      <button class="new-chat"><i class="pi pi-plus">Nuevo chat</i></button>
-      <button class="cancel" @click="closeSideMenu" ><i class="pi pi-times"></i></button>
+      <button @click="createNewChat" class="new-chat"><i class="pi pi-plus">Nuevo chat</i></button>
+      <button class="cancel" @click="closeSideMenu"><i class="pi pi-times"></i></button>
     </div>
     <div class="chats-history">
-        <HistoryChat v-for="i in [1,2,3,4,5,6,7,8,9,10,11,12]" text="Texto de ejemplo" ></HistoryChat>
+      <HistoryChat
+        v-for="chat in chats"
+        :key="chat.chatId"
+        :text="chat.llmqueries[0].output.text"
+        @click="handleChat(chat.chatId)"
+      ></HistoryChat>
     </div>
     <div class="down-buttons">
       <div class="user-login">
         <i class="pi pi-user"></i>
         <p>{{ username }}</p>
-        
       </div>
       <button @click="handleLogout" class="logout">
         <i class="pi pi-sign-out"></i>
@@ -49,7 +66,7 @@ const handleLogout = () =>{
   height: 100dvh;
   padding: 20px;
   box-shadow: 0px 0px 3px 0px gray;
-  background-color: #F7F8FA;
+  background-color: #f7f8fa;
   position: fixed;
   z-index: 2;
   left: 0px;
@@ -60,29 +77,32 @@ const handleLogout = () =>{
   flex-direction: column;
 }
 
-.chats-history{
-    display: grid;
-    grid-template-columns: 100%;
-    height: 70%;
-    width: 100%;
-    flex-wrap: wrap;
-    overflow-y: auto;
-    overflow-x: hidden;
+.chats-history {
+  display: grid;
+  grid-template-columns: 100%;
+  height: 70%;
+  width: 100%;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
-.up-buttons, .down-buttons {
+.up-buttons,
+.down-buttons {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
 }
 
-.cancel, .logout {
+.cancel,
+.logout {
   background: transparent;
   border: none;
 }
 
-.cancel > i, .logout > i {
+.cancel > i,
+.logout > i {
   font-size: 1.6rem;
   padding: 10px;
   color: #81878b;
@@ -109,21 +129,21 @@ const handleLogout = () =>{
   font-size: 1rem;
 }
 
-
-.new-chat > i:hover{
+.new-chat > i:hover {
   color: white;
   background-color: #009150;
   cursor: pointer;
 }
 
-.cancel > i:hover, .logout >i:hover {
+.cancel > i:hover,
+.logout > i:hover {
   color: #009150;
   cursor: pointer;
   border-radius: 50%;
   background-color: #dff7df;
 }
 
-.user-login{
+.user-login {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -143,32 +163,29 @@ const handleLogout = () =>{
 }
 
 @media (max-width: 780px) {
-    .container{
-        width: 50dvw;
-    }
+  .container {
+    width: 50dvw;
+  }
 }
 
 @media (max-width: 480px) {
-    .container{
-        width: 75dvw;
-    }
+  .container {
+    width: 75dvw;
+  }
 }
 
-.slide-in{
-    animation: slideIn .3s ease-out forwards;
+.slide-in {
+  animation: slideIn 0.3s ease-out forwards;
 }
-
 
 @keyframes slideIn {
-    from{
-        transform: translateX(-100%);
-        opacity: 0;
-    }
-    to{
-        transform: translateX(0);
-        opacity: 1;
-    }
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
-
-
 </style>

@@ -17,8 +17,11 @@ import {
   responseInterceptor,
 } from './utils/chat.handle-messages.ts'
 import { htmlClassUtilities } from './utils/chat.format-methods.ts'
+import { Chat } from '@/interfaces/Chats.ts'
 
 const isMenuOpen = ref(false)
+
+const history = ref<Chat[]>()
 
 const handleMenu = () => {
   isMenuOpen.value = true
@@ -28,13 +31,17 @@ const handleClose = (value: boolean) => {
   isMenuOpen.value = value
 }
 
+const handleChats = () =>{
+  history.value = []
+}
+
 
 </script>
 
 <template>
   <button class="side-menu-btn" @click="handleMenu"><i class="pi pi-bars"></i></button>
   <div v-if="isMenuOpen">
-    <SideMenu @closeSideMenu="handleClose"></SideMenu>
+    <SideMenu @closeSideMenu="handleClose" @create-new-chat="handleChats" ></SideMenu>
   </div>
   <main>
     <div class="chat-container">
@@ -49,6 +56,7 @@ const handleClose = (value: boolean) => {
         :requestInterceptor="requestInterceptor"
         :responseInterceptor="responseInterceptor"
         :htmlClassUtilities="htmlClassUtilities"
+        :history="history"
       >
         <IntroPanel />
       </deep-chat>
