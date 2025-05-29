@@ -36,6 +36,7 @@ const handleLogin = async () => {
 }
 
 const handleButtonEnable = () =>{
+  errorMsg.value = false
   if(username.value.length > 3 && password.value.length > 3){
     disabledSendBtn.value = false
   } else{
