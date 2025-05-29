@@ -1,19 +1,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+const router = useRouter()
 
 const username = ref<string>('')
 const password = ref<string>('')
 const errorMsg = ref<boolean>(false)
 const disabledSendBtn = ref<boolean>(true)
-const router = useRouter()
 
 const handleLogin = async () => {
   const loginParams = new URLSearchParams()
   loginParams.append('username', username.value)
   loginParams.append('password', password.value)
   const apiUrl = import.meta.env.VITE_API_URL
-
   try {
     const response = await fetch(`${apiUrl}/users/login`, {
       method: 'POST',
@@ -28,22 +30,22 @@ const handleLogin = async () => {
 
     const tokenData = await response.json()
     router.push('/chat')
-    localStorage.setItem('token', tokenData.access_token)
+    localStorage.setItem('access_token', tokenData.access_token)
+    authStore.setUsername(username.value)
   } catch (error) {
     console.error('Error getting OAuth token:', error)
     errorMsg.value = true
   }
 }
 
-const handleButtonEnable = () =>{
+const handleButtonEnable = () => {
   errorMsg.value = false
-  if(username.value.length > 3 && password.value.length > 3){
+  if (username.value.length > 3 && password.value.length > 3) {
     disabledSendBtn.value = false
-  } else{
+  } else {
     disabledSendBtn.value = true
   }
 }
-
 </script>
 
 <template>
@@ -53,14 +55,33 @@ const handleButtonEnable = () =>{
       <p class="welcome">Bienvenido</p>
       <div class="username-container">
         <label for="username">Usuario</label>
-        <input type="text" id="username" placeholder="Nombre de usuario" v-model="username" @input="handleButtonEnable" />
+        <input
+          type="text"
+          id="username"
+          placeholder="Nombre de usuario"
+          v-model="username"
+          @input="handleButtonEnable"
+        />
       </div>
       <div class="password-container">
         <label for="password">Contraseña</label>
-        <input type="password" id="password" placeholder="Contraseña" v-model="password" @input="handleButtonEnable" />
+        <input
+          type="password"
+          id="password"
+          placeholder="Contraseña"
+          v-model="password"
+          @input="handleButtonEnable"
+        />
       </div>
       <p v-show="errorMsg" class="error-msg">Usuario o contraseña incorrectos</p>
-      <button :disabled="disabledSendBtn" :class="{'hover-btn': !disabledSendBtn}" class="send-btn" @click="handleLogin">Entrar</button>
+      <button
+        :disabled="disabledSendBtn"
+        :class="{ 'hover-btn': !disabledSendBtn }"
+        class="send-btn"
+        @click="handleLogin"
+      >
+        Entrar
+      </button>
     </div>
   </div>
 </template>
@@ -122,7 +143,7 @@ img {
   margin-bottom: 10px;
 }
 
-.send-btn:disabled{
+.send-btn:disabled {
   color: #dff7df;
   border: 1px solid #dff7df;
 }

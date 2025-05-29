@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import 'primeicons/primeicons.css'
 import HistoryChat from './HistoryChat.vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
 const emit = defineEmits(['closeSideMenu'])
 
+const authStore = useAuthStore()
+const username = authStore.username
+const router = useRouter()
+
 const closeSideMenu = () =>{
     emit('closeSideMenu',false)
+}
+
+const handleLogout = () =>{
+  localStorage.removeItem('access_token')
+  router.push('/')
 }
 
 </script>
@@ -20,8 +31,12 @@ const closeSideMenu = () =>{
         <HistoryChat v-for="i in [1,2,3,4,5,6,7,8,9,10,11,12]" text="Texto de ejemplo" ></HistoryChat>
     </div>
     <div class="down-buttons">
-      <button class="settings"><i class="pi pi-cog"></i></button>
-      <button class="logout">
+      <div class="user-login">
+        <i class="pi pi-user"></i>
+        <p>{{ username }}</p>
+        
+      </div>
+      <button @click="handleLogout" class="logout">
         <i class="pi pi-sign-out"></i>
       </button>
     </div>
@@ -67,15 +82,14 @@ const closeSideMenu = () =>{
   border: none;
 }
 
-.cancel > i, .logout > i, .settings > i {
+.cancel > i, .logout > i {
   font-size: 1.6rem;
   padding: 10px;
   color: #81878b;
   transition: 0.3s ease-in-out;
 }
 
-.new-chat,
-.settings {
+.new-chat {
   background-color: transparent;
   border: none;
 }
@@ -96,21 +110,37 @@ const closeSideMenu = () =>{
 }
 
 
-.new-chat > i:hover,
-.settings > i:hover {
+.new-chat > i:hover{
   color: white;
   background-color: #009150;
   cursor: pointer;
 }
 
-.cancel > i:hover, .logout >i:hover, .settings > i:hover {
+.cancel > i:hover, .logout >i:hover {
   color: #009150;
   cursor: pointer;
   border-radius: 50%;
   background-color: #dff7df;
 }
 
+.user-login{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
+.user-login i {
+  color: #009150;
+  font-size: 1.2rem;
+  border: 1px solid #009150;
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.user-login p {
+  margin: 0;
+}
 
 @media (max-width: 780px) {
     .container{

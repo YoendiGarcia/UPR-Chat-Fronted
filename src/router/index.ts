@@ -9,6 +9,7 @@ const router = createRouter({
       path: '/chat',
       name: 'chat',
       component: Chat,
+      meta: { requiresAuth: true }
     },
     {
       path: '/',
@@ -17,5 +18,35 @@ const router = createRouter({
     },
   ],
 })
+
+
+router.beforeEach((to, from, next) => {
+  // Verificar autenticación
+  const isAuthenticated = checkAuth()
+  
+  // Ruta protegida y no autenticado
+  if (to.meta.requiresAuth && !isAuthenticated) {
+    next({
+      path: '/',
+      query: { redirect: to.fullPath }
+    })
+    return
+  }
+  
+  // Si está autenticado y va al login, redirigir al chat
+  if (to.name === 'login' && isAuthenticated) {
+    next({ path: '/chat' })
+    return
+  }
+  
+  next()
+})
+
+// Función para verificar autenticación (ajusta según tu implementación)
+function checkAuth(): boolean {
+  // Ejemplo: verificar token en localStorage
+  return localStorage.getItem('access_token') !== null
+  // O podrías verificar contra un store Pinia/Vuex
+}
 
 export default router
