@@ -6,7 +6,6 @@ import {
   fieldsValidated,
   data,
 } from './chat.format-methods'
-import { LLMQuery } from '@/interfaces/LLMQueries'
 
 //Variable para gestionar los formularios
 export let isForm = false

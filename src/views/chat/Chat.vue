@@ -15,6 +15,7 @@ import { connect } from './config/chat.connect.ts'
 import { requestInterceptor, responseInterceptor } from './utils/chat.handle-messages.ts'
 import { htmlClassUtilities } from './utils/chat.format-methods.ts'
 import { Chat } from '@/interfaces/Chats.ts'
+import { handleCurrentChatId } from './utils/chat.handle-messages.ts'
 
 const isMenuOpen = ref(false)
 
@@ -32,11 +33,11 @@ const handleClose = (value: boolean) => {
   isMenuOpen.value = value
 }
 
-const handleChats = () => {
+const handleChats = async () => {
   history.value = []
-  let currentChatId: any = localStorage.getItem('chat_id')
+  localStorage.setItem('chat_id', '')
+  let currentChatId = await handleCurrentChatId()
   if (!currentChatId) throw new Error('Not chat id')
-  currentChatId = parseInt(currentChatId) + 1
   localStorage.setItem('chat_id', currentChatId)
 }
 
@@ -86,11 +87,16 @@ const getChat = (chatId: number) => {
     let messages = chat.llmqueries
     for (let message of messages) {
       history.value.push(message.input.find((m) => m.role == 'user'))
-      history.value.push({ role: 'ai', text: message.output.text, html: message.output.html, files:message.output.files })
+      history.value.push({
+        role: 'ai',
+        text: message.output.text,
+        html: message.output.html,
+        files: message.output.files,
+      })
     }
   }
-  localStorage.setItem('chat_id',chatId.toString())
-  chargeKey.value +=1
+  localStorage.setItem('chat_id', chatId.toString())
+  chargeKey.value += 1
 }
 
 onMounted(async () => {
