@@ -185,6 +185,11 @@ input {
   font-size: 0.9rem;
 }
 
+input:focus{
+  outline: 1px solid #009150;
+  box-shadow: 0 0 5px 2px #dff7df;
+}
+
 .error-msg {
   color: #e60026;
   text-align: center;

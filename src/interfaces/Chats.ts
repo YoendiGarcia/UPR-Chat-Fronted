@@ -1,6 +1,6 @@
 import { LLMQuery } from './LLMQueries'
 
 export interface Chat {
-  chatId: number
+  id: number
   llmqueries: LLMQuery[]
 }

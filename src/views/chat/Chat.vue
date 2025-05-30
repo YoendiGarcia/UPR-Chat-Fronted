@@ -18,9 +18,11 @@ import { Chat } from '@/interfaces/Chats.ts'
 
 const isMenuOpen = ref(false)
 
-const history = ref<Chat[]>()
+const history = ref<any>([])
 
 const chats = ref<Chat[]>()
+
+const chargeKey = ref(0)
 
 const handleMenu = () => {
   isMenuOpen.value = true
@@ -77,6 +79,20 @@ const getChats = async () => {
   return chats
 }
 
+const getChat = (chatId: number) => {
+  const chat = chats.value?.find((chat) => chat.id == chatId)
+  history.value = []
+  if (chat) {
+    let messages = chat.llmqueries
+    for (let message of messages) {
+      history.value.push(message.input.find((m) => m.role == 'user'))
+      history.value.push({ role: 'ai', text: message.output.text, html: message.output.html, files:message.output.files })
+    }
+  }
+  localStorage.setItem('chat_id',chatId.toString())
+  chargeKey.value +=1
+}
+
 onMounted(async () => {
   localStorage.setItem('chat_id', '')
   chats.value = await getChats()
@@ -90,10 +106,11 @@ onMounted(async () => {
       :chats="chats?.length ? chats : []"
       @closeSideMenu="handleClose"
       @create-new-chat="handleChats"
+      @get-chat="getChat"
     ></SideMenu>
   </div>
   <main>
-    <div class="chat-container">
+    <div :key="chargeKey" class="chat-container">
       <deep-chat
         :demo="false"
         :avatars="avatars"

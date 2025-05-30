@@ -11,7 +11,7 @@ interface Props {
   chats: Chat[]
 }
 
-const emit = defineEmits(['closeSideMenu', 'createNewChat'])
+const emit = defineEmits(['closeSideMenu', 'createNewChat','getChat'])
 const props = defineProps<Props>()
 
 const username = localStorage.getItem('username')
@@ -28,8 +28,8 @@ const handleLogout = () => {
   router.push('/')
 }
 
-const handleChat = (chatId: number) => {
-  console.log('Saliooooo ->', chatId)
+const getChat = (chatId: number) => {
+  emit('getChat',chatId)
 }
 
 const createNewChat = async () => {
@@ -38,7 +38,7 @@ const createNewChat = async () => {
   if (!chatId) throw new Error('No chat ID available')
 
   chatStore.addChat({
-    chatId: parseInt(chatId),
+    id: parseInt(chatId),
     llmqueries: [],
   })
   emit('createNewChat', [])
@@ -55,9 +55,9 @@ const createNewChat = async () => {
     <div class="chats-history">
       <HistoryChat
         v-for="chat in props.chats"
-        :key="chat.chatId"
+        :key="chat.id"
         :text="chat.llmqueries[chat.llmqueries.length - 1]?.output?.text"
-        @click="handleChat(chat.chatId)"
+        @click="getChat(chat.id)"
       ></HistoryChat>
     </div>
     <div class="down-buttons">

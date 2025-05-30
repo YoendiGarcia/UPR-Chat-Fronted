@@ -23,7 +23,7 @@ export const requestInterceptor = async (requestDetails: any) => {
     if (fieldsValidated()) {
       requestDetails.body.messages.push({ role: 'user', text: JSON.stringify(data) })
     } else {
-      requestDetails.body.messages.push({ role: 'ia', text: 'Faltan campos por llenar' })
+      requestDetails.body.messages.push({ role: 'ai', text: 'Faltan campos por llenar' })
     }
   }
   currentLLMQuery.input = requestDetails.body.messages
@@ -74,7 +74,7 @@ const saveLLMQuery = async () => {
 
     const completeCurrentLLMQuery: LLMQuery = data
     const chatStore = useChatStore()
-    chatStore.addChat({ chatId: parseInt(currentChatId), llmqueries: [] })
+    chatStore.addChat({ id: parseInt(currentChatId), llmqueries: [] })
     chatStore.saveLLMQuery(parseInt(currentChatId), completeCurrentLLMQuery)
   } catch (error) {
     console.error('Error saving LLMQuery:', error)
@@ -102,6 +102,7 @@ export const handleCurrentChatId = async () => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
       let data = await response.json()
+      console.log(data)
       currentId = data['id']
     } catch (error) {
       console.error('Error creating new chat:', error)
