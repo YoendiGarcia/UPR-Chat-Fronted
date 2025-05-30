@@ -39,6 +39,8 @@ const handleChats = async () => {
   let currentChatId = await handleCurrentChatId()
   if (!currentChatId) throw new Error('Not chat id')
   localStorage.setItem('chat_id', currentChatId)
+  chats.value = []
+  chats.value = await getChats()
 }
 
 const getChats = async () => {

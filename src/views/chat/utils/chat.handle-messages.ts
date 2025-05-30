@@ -95,7 +95,6 @@ export const handleCurrentChatId = async () => {
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
       let data = await response.json()
-      console.log(data)
       currentId = data['id']
     } catch (error) {
       console.error('Error creating new chat:', error)

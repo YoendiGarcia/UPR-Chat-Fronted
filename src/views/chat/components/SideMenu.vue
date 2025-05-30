@@ -4,7 +4,6 @@ import HistoryChat from './HistoryChat.vue'
 import { useRouter } from 'vue-router'
 import { Chat } from '@/interfaces/Chats'
 
-
 interface Props {
   chats: Chat[]
 }
@@ -43,7 +42,7 @@ const createNewChat = async () => {
     </div>
     <div class="chats-history">
       <HistoryChat
-        v-for="chat in props.chats"
+        v-for="chat in props.chats.filter(chat => chat.llmqueries[0] != undefined)"
         :key="chat.id"
         :text="chat.llmqueries[chat.llmqueries.length - 1]?.output?.text"
         @click="getChat(chat.id)"
@@ -86,6 +85,7 @@ const createNewChat = async () => {
   flex-wrap: wrap;
   overflow-y: auto;
   overflow-x: hidden;
+  align-content: flex-start;
 }
 
 .up-buttons,
