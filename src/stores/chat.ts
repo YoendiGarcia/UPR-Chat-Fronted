@@ -17,7 +17,8 @@ export const useChatStore = defineStore('chat', {
       return this.chats[chatId]
     },
     saveLLMQuery(chatId: number, llmquery: LLMQuery): void {
-      this.chats[chatId].llmqueries.push(llmquery)
+      const chatObjective = this.chats.find(chat => chat.chatId == chatId)
+      chatObjective?.llmqueries.push(llmquery)
     },
     getAllChats(): Chat[] {
       return this.chats
@@ -26,58 +27,5 @@ export const useChatStore = defineStore('chat', {
 })
 
 export const useChatIdStore = defineStore('chatId', {
-  state: () => ({
-    currentChatId: null as number | null,
-    usedIds: new Set<number>(),
-    lastId: 0,
-  }),
-
-  actions: {
-    // Genera un nuevo ID único
-    generateNewId(): number {
-      let newId = this.lastId + 1
-
-      // Asegurarse de que el ID no esté en uso
-      while (this.usedIds.has(newId)) {
-        newId++
-      }
-
-      this.lastId = newId
-      this.usedIds.add(newId)
-      return newId
-    },
-
-    // Establece el chat actual
-    setCurrentChat(id: number): void {
-      if (!this.usedIds.has(id)) {
-        throw new Error(`El ID ${id} no existe en los chats registrados`)
-      }
-      this.currentChatId = id
-    },
-
-    // Libera un ID cuando se elimina un chat
-    releaseId(id: number): void {
-      this.usedIds.delete(id)
-      if (id === this.currentChatId) {
-        this.currentChatId = null
-      }
-    },
-
-    // Verifica si un ID está en uso
-    isIdInUse(id: number): boolean {
-      return this.usedIds.has(id)
-    },
-  },
-
-  getters: {
-    // Obtiene el ID actual
-    getCurrentId(): number | null {
-      return this.currentChatId
-    },
-
-    // Obtiene todos los IDs en uso
-    getAllUsedIds(): number[] {
-      return Array.from(this.usedIds)
-    },
-  },
+ 
 })

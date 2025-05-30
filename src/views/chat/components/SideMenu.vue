@@ -3,13 +3,21 @@ import 'primeicons/primeicons.css'
 import HistoryChat from './HistoryChat.vue'
 import { useRouter } from 'vue-router'
 import { useChatStore } from '@/stores/chat'
+import { handleCurrentChatId } from '../utils/chat.handle-messages'
+import { Chat } from '@/interfaces/Chats'
 
-const emit = defineEmits(['closeSideMenu','createNewChat'])
+
+interface Props {
+  chats: Chat[]
+}
+
+const emit = defineEmits(['closeSideMenu', 'createNewChat'])
+const props = defineProps<Props>()
 
 const username = localStorage.getItem('username')
 const router = useRouter()
 const chatStore = useChatStore()
-const chats = chatStore.getAllChats()
+
 
 const closeSideMenu = () => {
   emit('closeSideMenu', false)
@@ -24,12 +32,16 @@ const handleChat = (chatId: number) => {
   console.log('Saliooooo ->', chatId)
 }
 
-const createNewChat = () =>{
+const createNewChat = async () => {
+  const chatId = await handleCurrentChatId()
+
+  if (!chatId) throw new Error('No chat ID available')
+
   chatStore.addChat({
-    chatId: 1,
-    llmqueries: []
+    chatId: parseInt(chatId),
+    llmqueries: [],
   })
-  emit('createNewChat',[])
+  emit('createNewChat', [])
 }
 
 </script>
@@ -42,9 +54,9 @@ const createNewChat = () =>{
     </div>
     <div class="chats-history">
       <HistoryChat
-        v-for="chat in chats"
+        v-for="chat in props.chats"
         :key="chat.chatId"
-        :text="chat.llmqueries[0].output.text"
+        :text="chat.llmqueries[chat.llmqueries.length - 1]?.output?.text"
         @click="handleChat(chat.chatId)"
       ></HistoryChat>
     </div>

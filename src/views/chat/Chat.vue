@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import 'deep-chat'
 import IntroPanel from './components/IntroPanel.vue'
 import SideMenu from './components/SideMenu.vue'
@@ -12,16 +12,15 @@ import {
   avatars,
 } from './config/chat.styles.ts'
 import { connect } from './config/chat.connect.ts'
-import {
-  requestInterceptor,
-  responseInterceptor,
-} from './utils/chat.handle-messages.ts'
+import { requestInterceptor, responseInterceptor } from './utils/chat.handle-messages.ts'
 import { htmlClassUtilities } from './utils/chat.format-methods.ts'
 import { Chat } from '@/interfaces/Chats.ts'
 
 const isMenuOpen = ref(false)
 
 const history = ref<Chat[]>()
+
+const chats = ref<Chat[]>()
 
 const handleMenu = () => {
   isMenuOpen.value = true
@@ -31,17 +30,67 @@ const handleClose = (value: boolean) => {
   isMenuOpen.value = value
 }
 
-const handleChats = () =>{
+const handleChats = () => {
   history.value = []
+  let currentChatId: any = localStorage.getItem('chat_id')
+  if (!currentChatId) throw new Error('Not chat id')
+  currentChatId = parseInt(currentChatId) + 1
+  localStorage.setItem('chat_id', currentChatId)
 }
 
+const getChats = async () => {
+  const apiUrl = import.meta.env.VITE_API_URL
+  const token = localStorage.getItem('access_token')
+  let chats = []
 
+  try {
+    const chatsResponse = await fetch(`${apiUrl}/chats/`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!chatsResponse.ok) throw new Error(`HTTP error status: ${chatsResponse.status}`)
+
+    chats = await chatsResponse.json()
+
+    for (let chat of chats) {
+      const url = new URL(`${apiUrl}/llmqueries`)
+      url.searchParams.append('chat_id', chat.id)
+      const llmquerysResponse = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if (!llmquerysResponse.ok) throw new Error(`HTTP error status: ${llmquerysResponse.status}`)
+
+      const llmqueries = await llmquerysResponse.json()
+
+      chat.llmqueries = llmqueries
+    }
+  } catch (error) {
+    console.error('Error getting chats:', error)
+  }
+
+  return chats
+}
+
+onMounted(async () => {
+  localStorage.setItem('chat_id', '')
+  chats.value = await getChats()
+})
 </script>
 
 <template>
   <button class="side-menu-btn" @click="handleMenu"><i class="pi pi-bars"></i></button>
   <div v-if="isMenuOpen">
-    <SideMenu @closeSideMenu="handleClose" @create-new-chat="handleChats" ></SideMenu>
+    <SideMenu
+      :chats="chats?.length ? chats : []"
+      @closeSideMenu="handleClose"
+      @create-new-chat="handleChats"
+    ></SideMenu>
   </div>
   <main>
     <div class="chat-container">

@@ -51,8 +51,13 @@ export const responseInterceptor = async (response: any) => {
 const saveLLMQuery = async () => {
   const apiUrl = import.meta.env.VITE_API_URL
   const url = new URL(`${apiUrl}/llmqueries`)
+  const currentChatId = await handleCurrentChatId()
 
-  url.searchParams.append('chat_id', '1')
+  if (!currentChatId) {
+    throw new Error('No chat ID available')
+  }
+
+  url.searchParams.append('chat_id', currentChatId)
 
   try {
     const response = await fetch(url, {
@@ -69,9 +74,42 @@ const saveLLMQuery = async () => {
 
     const completeCurrentLLMQuery: LLMQuery = data
     const chatStore = useChatStore()
-    chatStore.addChat({ chatId: 0, llmqueries: [] })
-    chatStore.saveLLMQuery(0, completeCurrentLLMQuery)
+    chatStore.addChat({ chatId: parseInt(currentChatId), llmqueries: [] })
+    chatStore.saveLLMQuery(parseInt(currentChatId), completeCurrentLLMQuery)
   } catch (error) {
     console.error('Error saving LLMQuery:', error)
   }
+}
+
+export const handleCurrentChatId = async () => {
+  let currentId = localStorage.getItem('chat_id')
+  if (currentId == '') {
+    const apiUrl = import.meta.env.VITE_API_URL
+    const userId = localStorage.getItem('user_id')
+    const token = localStorage.getItem('access_token')
+    try {
+      const response = await fetch(`${apiUrl}/chats`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+        }),
+      })
+
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+      let data = await response.json()
+      currentId = data['id']
+    } catch (error) {
+      console.error('Error creating new chat:', error)
+    }
+  }
+  if (!currentId) {
+    throw new Error('No chat ID available')
+  }
+  localStorage.setItem('chat_id', currentId)
+  return currentId
 }

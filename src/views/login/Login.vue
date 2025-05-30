@@ -1,9 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
 
-const authStore = useAuthStore()
 const router = useRouter()
 
 const username = ref<string>('')
@@ -32,9 +30,28 @@ const handleLogin = async () => {
     router.push('/chat')
     localStorage.setItem('access_token', tokenData.access_token)
     localStorage.setItem('username', username.value)
+    handleUserId(apiUrl, tokenData.access_token)
   } catch (error) {
     console.error('Error getting OAuth token:', error)
     errorMsg.value = true
+  }
+}
+
+const handleUserId = async (apiUrl: string, token: string) => {
+  try {
+    const response = await fetch(`${apiUrl}/users/me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+    const userId = await response.json()
+    localStorage.setItem('user_id', userId)
+  } catch (error) {
+    console.error('Error getting user id:', error)
   }
 }
 

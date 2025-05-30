@@ -1,5 +1,5 @@
 export const connect = {
-    "url": "http://localhost:5000/",
+    "url": `${import.meta.env.VITE_API_URL}/chats/prompt`,
     "method": "POST",
   }
 
