@@ -2,8 +2,6 @@
 import 'primeicons/primeicons.css'
 import HistoryChat from './HistoryChat.vue'
 import { useRouter } from 'vue-router'
-import { useChatStore } from '@/stores/chat'
-import { handleCurrentChatId } from '../utils/chat.handle-messages'
 import { Chat } from '@/interfaces/Chats'
 
 
@@ -16,7 +14,6 @@ const props = defineProps<Props>()
 
 const username = localStorage.getItem('username')
 const router = useRouter()
-const chatStore = useChatStore()
 
 
 const closeSideMenu = () => {
@@ -33,14 +30,6 @@ const getChat = (chatId: number) => {
 }
 
 const createNewChat = async () => {
-  const chatId = await handleCurrentChatId()
-
-  if (!chatId) throw new Error('No chat ID available')
-
-  chatStore.addChat({
-    id: parseInt(chatId),
-    llmqueries: [],
-  })
   emit('createNewChat', [])
 }
 

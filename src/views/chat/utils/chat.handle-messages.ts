@@ -7,7 +7,6 @@ import {
   data,
 } from './chat.format-methods'
 import { LLMQuery } from '@/interfaces/LLMQueries'
-import { useChatStore } from '@/stores/chat'
 
 //Variable para gestionar los formularios
 export let isForm = false
@@ -70,12 +69,7 @@ const saveLLMQuery = async () => {
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
-    let data = await response.json()
 
-    const completeCurrentLLMQuery: LLMQuery = data
-    const chatStore = useChatStore()
-    chatStore.addChat({ id: parseInt(currentChatId), llmqueries: [] })
-    chatStore.saveLLMQuery(parseInt(currentChatId), completeCurrentLLMQuery)
   } catch (error) {
     console.error('Error saving LLMQuery:', error)
   }
