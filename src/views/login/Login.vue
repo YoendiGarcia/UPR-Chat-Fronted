@@ -27,7 +27,9 @@ const handleLogin = async () => {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
     const tokenData = await response.json()
-    router.push('/chat')
+    router.push('/chat').then(() => {
+      window.location.reload()
+    })
     localStorage.setItem('access_token', tokenData.access_token)
     localStorage.setItem('username', username.value)
     handleUserId(apiUrl, tokenData.access_token)
@@ -76,6 +78,7 @@ const handleButtonEnable = () => {
           type="text"
           id="username"
           placeholder="Nombre de usuario"
+          maxlength="20"
           v-model="username"
           @input="handleButtonEnable"
         />
@@ -86,6 +89,7 @@ const handleButtonEnable = () => {
           type="password"
           id="password"
           placeholder="Contraseña"
+          maxlength="20"
           v-model="password"
           @input="handleButtonEnable"
         />
@@ -185,7 +189,7 @@ input {
   font-size: 0.9rem;
 }
 
-input:focus{
+input:focus {
   outline: 1px solid #009150;
   box-shadow: 0 0 5px 2px #dff7df;
 }

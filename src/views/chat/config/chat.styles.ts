@@ -1,3 +1,4 @@
+
 //Estilo general del chat
 export const style = 'width: 100%; height: 90dvh; border: none'
 
@@ -59,9 +60,31 @@ export const submitButtonStyles = {
 
 //Estilos de los avatars
 export const avatars = {
-  // default: {
-  //   styles: { avatar: { height: '30px', width: '30px' }, container: { marginTop: '8px' } },
-  // },
+  default: {
+    styles: { avatar: { height: '30px', width: '30px' }, container: { marginTop: '8px' } },
+  },
   ai: { src: '../../../assets/ai.svg', styles: { avatar: { marginLeft: '-3px' } } },
   user: { src: '../../../assets/user.svg', styles: { avatar: { borderRadius: '15px' } } },
+}
+
+//Estilos de los names
+
+const username = localStorage.getItem('username')
+
+export const names = {
+  ai:{
+    text:"AI",
+    style:{
+      color: "#009150",
+      textAlign:"center",
+      fontWeight:'bolder'
+    }
+  },
+  user:{
+    text: username,
+    style:{
+      color: "#009150",
+      fontWeight:'bolder'
+    }
+  }
 }

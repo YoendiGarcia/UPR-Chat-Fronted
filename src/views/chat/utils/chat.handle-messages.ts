@@ -23,7 +23,7 @@ export const requestInterceptor = async (requestDetails: any) => {
     } else {
       requestDetails.body.messages.push({ role: 'ai', text: 'Faltan campos por llenar' })
     }
-  }
+  } 
   currentLLMQuery.input = requestDetails.body.messages
   return requestDetails
 }

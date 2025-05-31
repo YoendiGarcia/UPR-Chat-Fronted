@@ -9,7 +9,7 @@ import {
   submitButtonStyles,
   style,
   textInput,
-  avatars,
+  names
 } from './config/chat.styles.ts'
 import { connect } from './config/chat.connect.ts'
 import { requestInterceptor, responseInterceptor } from './utils/chat.handle-messages.ts'
@@ -101,6 +101,7 @@ const getChat = (chatId: number) => {
   chargeKey.value += 1
 }
 
+
 onMounted(async () => {
   localStorage.setItem('chat_id', '')
   chats.value = await getChats()
@@ -121,7 +122,6 @@ onMounted(async () => {
     <div :key="chargeKey" class="chat-container">
       <deep-chat
         :demo="false"
-        :avatars="avatars"
         :connect="connect"
         :style="style"
         :textInput="textInput"
@@ -131,6 +131,7 @@ onMounted(async () => {
         :responseInterceptor="responseInterceptor"
         :htmlClassUtilities="htmlClassUtilities"
         :history="history"
+        :names="names"
       >
         <IntroPanel />
       </deep-chat>
