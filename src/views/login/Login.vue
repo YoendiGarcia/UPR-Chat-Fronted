@@ -201,31 +201,33 @@ input:focus {
 
 @media (max-width: 980px) {
   .container > div {
-    width: 40%;
+    width: 50%;
   }
 }
 
 @media (max-width: 730px) {
   .container > div {
-    width: 50%;
+    width: 60%;
   }
 }
 
 @media (max-width: 520px) {
   .container > div {
-    width: 60%;
+    width: 70%;
   }
 }
 
 @media (max-width: 480px) {
   .container > div {
-    width: 70%;
+    width: 80%;
+    height: 60%;
   }
 }
 
 @media (max-width: 350px) {
   .container > div {
-    width: 80%;
+    width: 90%;
+    height: 60%;
   }
 }
 </style>
