@@ -66,7 +66,7 @@ const createNewChat = async () => {
   height: 100dvh;
   padding: 20px;
   box-shadow: 0px 0px 3px 0px gray;
-  background-color: #f7f8fa;
+  background-color: white;
   position: fixed;
   z-index: 2;
   left: 0px;

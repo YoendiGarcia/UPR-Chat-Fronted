@@ -172,8 +172,8 @@ h1 {
   padding: 10px;
   font-size: 1.8rem;
   position: absolute;
-  left: 30px;
-  top: 30px;
+  left: 20px;
+  top: 20px;
 }
 
 .side-menu-btn > i:hover {
