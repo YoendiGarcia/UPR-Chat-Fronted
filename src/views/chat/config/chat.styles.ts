@@ -11,6 +11,7 @@ export const textInput = {
       width: '90%',
       borderRadius: '10px',
       boxShadow: '0px 0px 10px 5px #dff7df',
+      backgroundColor: "#fafbfd"
     },
   },
 }
@@ -72,7 +73,7 @@ const username = localStorage.getItem('username')
 
 export const names = {
   ai:{
-    text:"AI",
+    text:"UPR Agent",
     style:{
       color: "#009150",
       textAlign:"center",

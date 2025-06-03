@@ -145,7 +145,7 @@ img {
 
 .welcome {
   color: #009150;
-  font-size: 2rem;
+  font-size: 1.6rem;
   font-weight: bold;
   margin: 0;
 }
@@ -176,7 +176,7 @@ img {
 }
 
 label {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #009150;
   width: 100%;
 }

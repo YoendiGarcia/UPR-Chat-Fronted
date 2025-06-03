@@ -148,15 +148,17 @@ const createNewChat = async () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  /* flex-direction: column; */
+  gap: 5px;
 }
 
 .user-login i {
-  color: #009150;
+  color: white;
   font-size: 1.2rem;
   border: 1px solid #009150;
   padding: 10px;
   border-radius: 50%;
+  background-color: #009150;
 }
 
 .user-login p {

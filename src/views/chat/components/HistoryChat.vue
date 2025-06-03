@@ -15,12 +15,13 @@ const props = defineProps<Props>()
 <style scoped>
 div {
   transition: 0.3s ease-in;
-  width: 90%;
+  width: 100%;
   height: 50px;
-  border-radius: 5px;
-  border: 1px solid #81878b;
-  margin: 3px;
+  border-radius: 7px;
+  /* border: 1px solid #81878b; */
+  margin: 1px;
   padding: 3px;
+  background-color: #fafbfd;
 }
 
 p {
@@ -32,7 +33,6 @@ p {
 
 div:hover {
   background-color: #dff7df;
-  border: 1px solid #dff7df;
   cursor: pointer;
 }
 </style>
