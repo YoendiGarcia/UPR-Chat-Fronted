@@ -35,17 +35,17 @@ const handleClose = (value: boolean) => {
 
 const handleChats = async () => {
   history.value = []
-  localStorage.setItem('chat_id', '')
+  sessionStorage.setItem('chat_id', '')
   let currentChatId = await handleCurrentChatId()
   if (!currentChatId) throw new Error('Not chat id')
-  localStorage.setItem('chat_id', currentChatId)
+  sessionStorage.setItem('chat_id', currentChatId)
   chats.value = []
   chats.value = await getChats()
 }
 
 const getChats = async () => {
   const apiUrl = import.meta.env.VITE_API_URL
-  const token = localStorage.getItem('access_token')
+  const token = sessionStorage.getItem('access_token')
   let chats = []
 
   try {
@@ -97,13 +97,13 @@ const getChat = (chatId: number) => {
       })
     }
   }
-  localStorage.setItem('chat_id', chatId.toString())
+  sessionStorage.setItem('chat_id', chatId.toString())
   chargeKey.value += 1
 }
 
 
 onMounted(async () => {
-  localStorage.setItem('chat_id', '')
+  sessionStorage.setItem('chat_id', '')
   chats.value = await getChats()
 })
 </script>

@@ -21,7 +21,7 @@ div {
   /* border: 1px solid #81878b; */
   margin: 1px;
   padding: 3px;
-  background-color: #fafbfd;
+  background-color: #F7FFF5;
 }
 
 p {

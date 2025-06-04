@@ -75,11 +75,11 @@ const saveLLMQuery = async () => {
 }
 
 export const handleCurrentChatId = async () => {
-  let currentId = localStorage.getItem('chat_id')
+  let currentId = sessionStorage.getItem('chat_id')
   if (currentId == '') {
     const apiUrl = import.meta.env.VITE_API_URL
-    const userId = localStorage.getItem('user_id')
-    const token = localStorage.getItem('access_token')
+    const userId = sessionStorage.getItem('user_id')
+    const token = sessionStorage.getItem('access_token')
     try {
       const response = await fetch(`${apiUrl}/chats`, {
         method: 'POST',
@@ -103,6 +103,6 @@ export const handleCurrentChatId = async () => {
   if (!currentId) {
     throw new Error('No chat ID available')
   }
-  localStorage.setItem('chat_id', currentId)
+  sessionStorage.setItem('chat_id', currentId)
   return currentId
 }

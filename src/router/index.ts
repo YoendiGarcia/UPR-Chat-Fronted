@@ -45,7 +45,7 @@ router.beforeEach((to, from, next) => {
 // Función para verificar autenticación (ajusta según tu implementación)
 function checkAuth(): boolean {
   // Ejemplo: verificar token en localStorage
-  return localStorage.getItem('access_token') !== null
+  return sessionStorage.getItem('access_token') !== null
   // O podrías verificar contra un store Pinia/Vuex
 }
 

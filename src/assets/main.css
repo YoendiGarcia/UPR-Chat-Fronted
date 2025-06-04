@@ -10,4 +10,8 @@ body{
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  background-color: #FEFEFE;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }

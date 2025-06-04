@@ -30,8 +30,8 @@ const handleLogin = async () => {
     router.push('/chat').then(() => {
       window.location.reload()
     })
-    localStorage.setItem('access_token', tokenData.access_token)
-    localStorage.setItem('username', username.value)
+    sessionStorage.setItem('access_token', tokenData.access_token)
+    sessionStorage.setItem('username', username.value)
     handleUserId(apiUrl, tokenData.access_token)
   } catch (error) {
     console.error('Error getting OAuth token:', error)
@@ -51,7 +51,7 @@ const handleUserId = async (apiUrl: string, token: string) => {
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
 
     const userId = await response.json()
-    localStorage.setItem('user_id', userId)
+    sessionStorage.setItem('user_id', userId)
   } catch (error) {
     console.error('Error getting user id:', error)
   }

@@ -11,7 +11,7 @@ interface Props {
 const emit = defineEmits(['closeSideMenu', 'createNewChat','getChat'])
 const props = defineProps<Props>()
 
-const username = localStorage.getItem('username')
+const username = sessionStorage.getItem('username')
 const router = useRouter()
 
 
@@ -20,7 +20,7 @@ const closeSideMenu = () => {
 }
 
 const handleLogout = () => {
-  localStorage.removeItem('access_token')
+  sessionStorage.removeItem('access_token')
   router.push('/')
 }
 
@@ -66,7 +66,7 @@ const createNewChat = async () => {
   height: 100dvh;
   padding: 20px;
   box-shadow: 0px 0px 3px 0px gray;
-  background-color: white;
+  background-color: #FEFEFE;
   position: fixed;
   z-index: 2;
   left: 0px;
@@ -106,7 +106,7 @@ const createNewChat = async () => {
 .logout > i {
   font-size: 1.6rem;
   padding: 10px;
-  color: #81878b;
+  color: #63686B;
   transition: 0.3s ease-in-out;
 }
 
@@ -118,7 +118,7 @@ const createNewChat = async () => {
 .new-chat > i {
   font-size: 1.2rem;
   color: #009150;
-  background-color: #fafbfd;
+  background-color: #dff7df;
   width: 130px;
   height: 40px;
   padding: 5px;
@@ -131,7 +131,7 @@ const createNewChat = async () => {
 }
 
 .new-chat > i:hover {
-  background-color: #dff7df;
+  background-color: #C8EAC8;
   cursor: pointer;
 }
 

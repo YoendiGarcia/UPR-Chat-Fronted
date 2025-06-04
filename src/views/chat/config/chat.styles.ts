@@ -1,6 +1,6 @@
 
 //Estilo general del chat
-export const style = 'width: 100%; height: 90dvh; border: none'
+export const style = 'width: 100%; height: 90dvh; border: none; background-color: #FEFEFE'
 
 //Estilos del input
 export const textInput = {
@@ -11,7 +11,7 @@ export const textInput = {
       width: '90%',
       borderRadius: '10px',
       boxShadow: '0px 0px 10px 5px #dff7df',
-      backgroundColor: "#fafbfd"
+      backgroundColor: "#F7FFF5"
     },
   },
 }
