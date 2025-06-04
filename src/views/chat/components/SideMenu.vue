@@ -118,7 +118,7 @@ const createNewChat = async () => {
 .new-chat > i {
   font-size: 1.2rem;
   color: #009150;
-  border: 1px solid #009150;
+  background-color: #fafbfd;
   width: 130px;
   height: 40px;
   padding: 5px;
@@ -131,8 +131,7 @@ const createNewChat = async () => {
 }
 
 .new-chat > i:hover {
-  color: white;
-  background-color: #009150;
+  background-color: #dff7df;
   cursor: pointer;
 }
 
@@ -153,12 +152,11 @@ const createNewChat = async () => {
 }
 
 .user-login i {
-  color: white;
+  color: #009150;
   font-size: 1.2rem;
-  border: 1px solid #009150;
+  background-color: #dff7df;
   padding: 10px;
   border-radius: 50%;
-  background-color: #009150;
 }
 
 .user-login p {
