@@ -8,7 +8,7 @@ interface Props {
   chats: Chat[]
 }
 
-const emit = defineEmits(['closeSideMenu', 'createNewChat','getChat'])
+const emit = defineEmits(['closeSideMenu', 'createNewChat','getChat','deleteChat'])
 const props = defineProps<Props>()
 
 const username = sessionStorage.getItem('username')
@@ -24,12 +24,16 @@ const handleLogout = () => {
   router.push('/')
 }
 
-const getChat = (chatId: number) => {
-  emit('getChat',chatId)
-}
-
 const createNewChat = async () => {
   emit('createNewChat', [])
+}
+
+const getChat = async (id: number) =>{
+  emit('getChat',id)
+} 
+
+const deleteChat = async (id: number) =>{
+  emit("deleteChat",id)
 }
 
 </script>
@@ -45,7 +49,9 @@ const createNewChat = async () => {
         v-for="chat in props.chats.filter(chat => chat.llmqueries[0] != undefined)"
         :key="chat.id"
         :text="chat.llmqueries[chat.llmqueries.length - 1]?.output?.text"
-        @click="getChat(chat.id)"
+        :id="chat.id"
+        @get-chat="getChat"
+        @delete-chat="deleteChat"
       ></HistoryChat>
     </div>
     <div class="down-buttons">

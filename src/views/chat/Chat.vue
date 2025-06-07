@@ -4,13 +4,7 @@ import 'deep-chat'
 import IntroPanel from './components/IntroPanel.vue'
 import SideMenu from './components/SideMenu.vue'
 import 'primeicons/primeicons.css'
-import {
-  messageStyles,
-  submitButtonStyles,
-  style,
-  textInput,
-  names
-} from './config/chat.styles.ts'
+import { messageStyles, submitButtonStyles, style, textInput, names } from './config/chat.styles.ts'
 import { connect } from './config/chat.connect.ts'
 import { requestInterceptor, responseInterceptor } from './utils/chat.handle-messages.ts'
 import { htmlClassUtilities } from './utils/chat.format-methods.ts'
@@ -101,6 +95,25 @@ const getChat = (chatId: number) => {
   chargeKey.value += 1
 }
 
+const handleDelete = async (id: number) => {
+  const apiUrl = import.meta.env.VITE_API_URL
+  const token = sessionStorage.getItem('access_token')
+
+  try {
+    const response = await fetch(`${apiUrl}/chats/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.ok) throw new Error(`HTTP error status: ${response.status}`)
+    chats.value = []
+    chats.value = await getChats()
+  } catch (error) {
+    console.error('Error deleting chat:', error)
+  }
+}
 
 onMounted(async () => {
   sessionStorage.setItem('chat_id', '')
@@ -116,6 +129,7 @@ onMounted(async () => {
       @closeSideMenu="handleClose"
       @create-new-chat="handleChats"
       @get-chat="getChat"
+      @delete-chat="handleDelete"
     ></SideMenu>
   </div>
   <main>
