@@ -69,7 +69,7 @@ export const avatars = {
 
 //Estilos de los names
 
-const username = localStorage.getItem('username')
+const username = sessionStorage.getItem('username')
 
 export const names = {
   ai:{

@@ -110,6 +110,9 @@ const handleDelete = async (id: number) => {
     if (!response.ok) throw new Error(`HTTP error status: ${response.status}`)
     chats.value = []
     chats.value = await getChats()
+    if (sessionStorage.getItem('chat_id') == id.toString()) {
+      await handleChats()
+    }
   } catch (error) {
     console.error('Error deleting chat:', error)
   }
