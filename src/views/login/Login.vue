@@ -115,6 +115,7 @@ const handleButtonEnable = () => {
   align-items: center;
   flex-direction: column;
   gap: 10px;
+  background-color: white;
 }
 
 .container {

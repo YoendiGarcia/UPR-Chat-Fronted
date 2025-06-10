@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted,ref } from 'vue'
 import 'deep-chat'
 import IntroPanel from './components/IntroPanel.vue'
 import SideMenu from './components/SideMenu.vue'
@@ -18,6 +18,7 @@ const history = ref<any>([])
 const chats = ref<Chat[]>()
 
 const chargeKey = ref(0)
+
 
 const handleMenu = () => {
   isMenuOpen.value = true
@@ -116,10 +117,13 @@ const handleDelete = async (id: number) => {
   }
 }
 
+
 onMounted(async () => {
   sessionStorage.setItem('chat_id', '')
   chats.value = await getChats()
 })
+
+
 </script>
 
 <template>
@@ -132,6 +136,7 @@ onMounted(async () => {
       @get-chat="getChat"
       @delete-chat="handleDelete"
     ></SideMenu>
+    <div v-if="isMenuOpen" class="menu-overlay" @click="handleClose(!isMenuOpen)"></div>
   </div>
   <main>
     <div :key="chargeKey" class="chat-container">
@@ -194,6 +199,15 @@ h1 {
 .side-menu-btn > i:hover {
   background-color: #dff7df;
   cursor: pointer;
+}
+
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
 }
 
 @media (max-width: 480px) {

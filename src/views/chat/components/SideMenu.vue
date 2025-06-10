@@ -8,12 +8,11 @@ interface Props {
   chats: Chat[]
 }
 
-const emit = defineEmits(['closeSideMenu', 'createNewChat','getChat','deleteChat'])
+const emit = defineEmits(['closeSideMenu', 'createNewChat', 'getChat', 'deleteChat'])
 const props = defineProps<Props>()
 
 const username = sessionStorage.getItem('username')
 const router = useRouter()
-
 
 const closeSideMenu = () => {
   emit('closeSideMenu', false)
@@ -28,14 +27,13 @@ const createNewChat = async () => {
   emit('createNewChat', [])
 }
 
-const getChat = async (id: number) =>{
-  emit('getChat',id)
-} 
-
-const deleteChat = async (id: number) =>{
-  emit("deleteChat",id)
+const getChat = async (id: number) => {
+  emit('getChat', id)
 }
 
+const deleteChat = async (id: number) => {
+  emit('deleteChat', id)
+}
 </script>
 
 <template>
@@ -46,7 +44,7 @@ const deleteChat = async (id: number) =>{
     </div>
     <div class="chats-history">
       <HistoryChat
-        v-for="chat in props.chats.filter(chat => chat.llmqueries[0] != undefined)"
+        v-for="chat in props.chats.filter((chat) => chat.llmqueries[0] != undefined)"
         :key="chat.id"
         :text="chat.llmqueries[chat.llmqueries.length - 1]?.output?.text"
         :id="chat.id"
@@ -68,13 +66,14 @@ const deleteChat = async (id: number) =>{
 
 <style scoped>
 .container {
+  position: fixed;
   width: 25dvw;
   height: 100dvh;
   padding: 20px;
   box-shadow: 0px 0px 3px 0px gray;
-  background-color: #FEFEFE;
+  background-color: #fefefe;
   position: fixed;
-  z-index: 2;
+  z-index: 1000;
   left: 0px;
   top: 0px;
   display: flex;
@@ -112,7 +111,7 @@ const deleteChat = async (id: number) =>{
 .logout > i {
   font-size: 1.6rem;
   padding: 10px;
-  color: #63686B;
+  color: #63686b;
   transition: 0.3s ease-in-out;
 }
 
@@ -137,7 +136,7 @@ const deleteChat = async (id: number) =>{
 }
 
 .new-chat > i:hover {
-  background-color: #C8EAC8;
+  background-color: #c8eac8;
   cursor: pointer;
 }
 
