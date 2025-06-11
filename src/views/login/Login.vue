@@ -70,7 +70,7 @@ const handleButtonEnable = () => {
 <template>
   <div class="container">
     <div>
-      <img src="../../assets/Logo.png" alt="Logo" />
+      <img src="../../assets/Logotipo.png" alt="Logo" />
       <p class="welcome">Bienvenido</p>
       <div class="username-container">
         <label for="username">Usuario</label>
