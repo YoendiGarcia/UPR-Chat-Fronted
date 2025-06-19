@@ -34,6 +34,11 @@ const getChat = async (id: number) => {
 const deleteChat = async (id: number) => {
   emit('deleteChat', id)
 }
+
+const goToUserData = ()=> {
+  router.push('/user_data')
+}
+
 </script>
 
 <template>
@@ -54,7 +59,7 @@ const deleteChat = async (id: number) => {
     </div>
     <div class="down-buttons">
       <div class="user-login">
-        <i class="pi pi-user"></i>
+        <i class="pi pi-user" @click="goToUserData" ></i>
         <p>{{ username }}</p>
       </div>
       <button @click="handleLogout" class="logout">
@@ -121,7 +126,6 @@ const deleteChat = async (id: number) => {
 }
 
 .new-chat > i {
-  font-size: 1.2rem;
   color: #009150;
   background-color: #dff7df;
   width: 130px;
@@ -162,6 +166,13 @@ const deleteChat = async (id: number) => {
   background-color: #dff7df;
   padding: 10px;
   border-radius: 50%;
+  transition: .3s ease-in-out;
+}
+
+.user-login i:hover{
+  background-color: #009150;
+  color: white;
+  cursor: pointer;
 }
 
 .user-login p {
