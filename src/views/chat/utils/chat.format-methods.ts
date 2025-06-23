@@ -273,7 +273,6 @@ export const styleForm = (form: any) => {
     input.style.border = '1px solid #ddd'
     input.style.borderRadius = '4px'
     input.style.fontSize = '16px'
-  
 
     // Añadir evento para el focus
     input.addEventListener('focus', function (this: any) {
@@ -307,10 +306,10 @@ export const styleForm = (form: any) => {
   button.style.borderRadius = '4px'
   button.style.cursor = 'pointer'
   button.style.transition = 'background-color 0.3s'
-  button.style.whiteSpace = 'nowrap';
-  button.style.overflow = 'hidden';
-  button.style.textOverflow = 'ellipsis';
-  button.style.width = "100%"
+  button.style.whiteSpace = 'nowrap'
+  button.style.overflow = 'hidden'
+  button.style.textOverflow = 'ellipsis'
+  button.style.width = '100%'
 
   const textError = form.querySelector('.text-error')
   textError.style.color = 'red'
@@ -375,7 +374,6 @@ export const fieldsValidated = () => {
   return true
 }
 
-
 //Funcion para controlar las interacciones con los inputs del formulario y recoger los datos
 export const htmlClassUtilities = {
   ['input']: {
@@ -409,9 +407,16 @@ export const htmlClassUtilities = {
   ['checkbox-group']: {
     events: {
       ['change']: (e: any) => {
-        data[e.target.closest('.checkbox-group').id] = new Array()
-        if (!data[e.target.closest('.checkbox-group').id].includes(e.target.value))
+        if (!data[e.target.closest('.checkbox-group').id]) {
+          data[e.target.closest('.checkbox-group').id] = new Array()
+        }
+        if (!data[e.target.closest('.checkbox-group').id].includes(e.target.value)) {
           data[e.target.closest('.checkbox-group').id].push(e.target.value)
+        } else {
+          data[e.target.closest('.checkbox-group').id] = data[
+            e.target.closest('.checkbox-group').id
+          ].filter((element: string) => element != e.target.value)
+        }
       },
     },
   },
@@ -422,22 +427,20 @@ export const htmlClassUtilities = {
       },
     },
   },
-  ['send-btn']:{
-    events:{
-      ['click']: (e: any) =>{
+  ['send-btn']: {
+    events: {
+      ['click']: (e: any) => {
         e.target.textContent = JSON.stringify(data)
-        e.target.style.visibility = "hidden"
+        e.target.style.visibility = 'hidden'
       },
-      ['mouseleave']: (e: any)=>{
-        e.target.textContent = "Enviar"
-        e.target.style.visibility = "visible"
+      ['mouseleave']: (e: any) => {
+        e.target.textContent = 'Enviar'
+        e.target.style.visibility = 'visible'
       },
-       ['mouseenter']: (e: any)=>{
-        e.target.textContent = "Enviar"
-        e.target.style.visibility = "visible"
-      }
-    }
-  }
+      ['mouseenter']: (e: any) => {
+        e.target.textContent = 'Enviar'
+        e.target.style.visibility = 'visible'
+      },
+    },
+  },
 }
-
-
