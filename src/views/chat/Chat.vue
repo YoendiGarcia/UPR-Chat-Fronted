@@ -11,6 +11,8 @@ import { htmlClassUtilities } from './utils/chat.format-methods.ts'
 import { Chat } from '@/interfaces/Chats.ts'
 import { handleCurrentChatId } from './utils/chat.handle-messages.ts'
 
+
+
 const isMenuOpen = ref(false)
 
 const history = ref<any>([])

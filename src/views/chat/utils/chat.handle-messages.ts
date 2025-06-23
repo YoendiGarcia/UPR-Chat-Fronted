@@ -17,14 +17,17 @@ export let currentLLMQuery = {
 
 //Funcion para manejar el request
 export const requestInterceptor = async (requestDetails: any) => {
+  let chat_id = await handleCurrentChatId()
+  requestDetails.body.chat_id = chat_id.toString()
   if (isForm) {
     if (fieldsValidated()) {
-      requestDetails.body.messages.push({ role: 'user', text: JSON.stringify(data) })
+      requestDetails.body.messages.push({ role: 'user', text: data })
     } else {
-      requestDetails.body.messages.push({ role: 'ai', text: 'Faltan campos por llenar' })
+      requestDetails.body.messages.push({ role: 'user', text: `${data} -> Faltan campos por llenar` })
     }
   } 
   currentLLMQuery.input = requestDetails.body.messages
+  console.log(requestDetails.body)
   return requestDetails
 }
 
@@ -106,3 +109,39 @@ export const handleCurrentChatId = async () => {
   sessionStorage.setItem('chat_id', currentId)
   return currentId
 }
+
+
+// export const sendData = async (data: string) =>{
+//   const apiUrl = import.meta.env.VITE_API_URL
+//   const currentChatId = await handleCurrentChatId()
+//   const token = sessionStorage.getItem('access_token')
+//   const body = {
+//     messages:[{
+//       "role":"user",
+//       "text":data.toString()
+//     }],
+//     chat_id:currentChatId.toString()
+//   }
+
+//   if (!currentChatId) {
+//     throw new Error('No chat ID available')
+//   }
+
+
+//   try {
+//     const response = await fetch(`${apiUrl}/chats/prompt`, {
+//       method: 'POST',
+//       headers: {
+//         'Content-type': 'application/json',
+//         'Authorization': `Bearer ${token}`,
+//       },
+//       body: JSON.stringify(body),
+//     })
+
+//     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+
+
+//   } catch (error) {
+//     console.error('Error saving data:', error)
+//   }
+// }

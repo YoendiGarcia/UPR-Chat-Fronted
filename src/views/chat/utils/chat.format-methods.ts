@@ -1,5 +1,5 @@
 import { FormField, FormConfig } from '@/interfaces/Forms'
-
+// import { sendData } from './chat.handle-messages'
 
 //Variable para guardar los datos de los inputs de los formularios
 export let data: any = {}
@@ -70,7 +70,6 @@ export const createForm = (config: FormConfig): HTMLDivElement => {
   submitButton.type = 'submit'
   submitButton.textContent = config.submitButtonText || 'Enviar'
   submitButton.className = config.submitButtonClass || 'send-btn'
-  submitButton.classList.add('deep-chat-temporary-message')
   submitButton.classList.add('deep-chat-suggestion-button')
   form.appendChild(submitButton)
 
@@ -274,6 +273,7 @@ export const styleForm = (form: any) => {
     input.style.border = '1px solid #ddd'
     input.style.borderRadius = '4px'
     input.style.fontSize = '16px'
+  
 
     // Añadir evento para el focus
     input.addEventListener('focus', function (this: any) {
@@ -307,6 +307,10 @@ export const styleForm = (form: any) => {
   button.style.borderRadius = '4px'
   button.style.cursor = 'pointer'
   button.style.transition = 'background-color 0.3s'
+  button.style.whiteSpace = 'nowrap';
+  button.style.overflow = 'hidden';
+  button.style.textOverflow = 'ellipsis';
+  button.style.width = "100%"
 
   const textError = form.querySelector('.text-error')
   textError.style.color = 'red'
@@ -371,6 +375,7 @@ export const fieldsValidated = () => {
   return true
 }
 
+
 //Funcion para controlar las interacciones con los inputs del formulario y recoger los datos
 export const htmlClassUtilities = {
   ['input']: {
@@ -417,5 +422,22 @@ export const htmlClassUtilities = {
       },
     },
   },
+  ['send-btn']:{
+    events:{
+      ['click']: (e: any) =>{
+        e.target.textContent = JSON.stringify(data)
+        e.target.style.visibility = "hidden"
+      },
+      ['mouseleave']: (e: any)=>{
+        e.target.textContent = "Enviar"
+        e.target.style.visibility = "visible"
+      },
+       ['mouseenter']: (e: any)=>{
+        e.target.textContent = "Enviar"
+        e.target.style.visibility = "visible"
+      }
+    }
+  }
 }
+
 
