@@ -37,6 +37,7 @@ const handleChats = async () => {
   if (!currentChatId) throw new Error('Not chat id')
   sessionStorage.setItem('chat_id', currentChatId)
   chats.value = await getChats()
+  chats.value?.reverse()
 }
 
 const getChats = async () => {
@@ -123,6 +124,7 @@ const handleDelete = async (id: number) => {
 onMounted(async () => {
   sessionStorage.setItem('chat_id', '')
   chats.value = await getChats()
+  chats.value = chats.value?.reverse()
 })
 
 
